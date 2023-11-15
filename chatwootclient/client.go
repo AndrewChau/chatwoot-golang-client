@@ -37,7 +37,7 @@ func NewChatwootClientWithAgentToken(baseUrl string, accountId int, agentBotToke
 }
 
 type CreateContactRequest struct {
-	InboxID          int         `json:"inbox_id"`
+	InboxID          int         `json:"inbox_id,omitempty"`
 	Name             string      `json:"name,omitempty"`
 	EMail            string      `json:"email,omitempty"`
 	PhoneNumber      string      `json:"phone_number,omitempty"`
@@ -106,7 +106,7 @@ func (client *ChatwootClient) CreateContact(createContactRequest CreateContactRe
 }
 
 type CreateNewConversationRequest struct {
-	SourceID  string `json:"source_id"`
+	SourceID  string `json:"source_id,omitempty"`
 	InboxID   int    `json:"inbox_id"`
 	ContactID string `json:"contact_id,omitempty"`
 	Status    string `json:"status,omitempty"`
