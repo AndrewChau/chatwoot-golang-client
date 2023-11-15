@@ -131,7 +131,7 @@ func (client *ChatwootClient) CreateNewConversation(createNewConversationRequest
 	request, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(requestJSON))
 
 	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	request.Header.Add("api_access_token", client.AgentBotToken)
+	request.Header.Add("api_access_token", client.AgentToken)
 
 	if err != nil {
 		return CreateNewConversationResponse{}, err
@@ -144,7 +144,7 @@ func (client *ChatwootClient) CreateNewConversation(createNewConversationRequest
 	}
 
 	if response.StatusCode != 200 {
-		return CreateNewConversationResponse{}, errors.New("Request failed" + response.Status)
+		return CreateNewConversationResponse{}, errors.New("Request failed: " + response.Status)
 	}
 
 	body, err := io.ReadAll(response.Body)
@@ -191,7 +191,7 @@ func (client *ChatwootClient) GetMessages(conversationId string) (ChatwootMessag
 	}
 
 	if response.StatusCode != 200 {
-		return nil, errors.New("Request failed" + response.Status)
+		return nil, errors.New("Request failed: " + response.Status)
 	}
 
 	responseBody, err := io.ReadAll(response.Body)
@@ -245,7 +245,7 @@ func (client *ChatwootClient) CreateNewMessage(conversationId int, createMessage
 	request, _ := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(requestBodyJSON))
 
 	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
-	request.Header.Add("api_access_token", client.AgentBotToken)
+	request.Header.Add("api_access_token", client.AgentToken)
 
 	response, err := http.DefaultClient.Do(request)
 
@@ -254,7 +254,7 @@ func (client *ChatwootClient) CreateNewMessage(conversationId int, createMessage
 	}
 
 	if response.StatusCode != 200 {
-		return CreateNewMessageResponse{}, errors.New("Request failed" + response.Status)
+		return CreateNewMessageResponse{}, errors.New("Request failed: " + response.Status)
 	}
 
 	body, err := io.ReadAll(response.Body)
@@ -343,7 +343,7 @@ func (client *ChatwootClient) AddLabels(conversationId int, labels []string) err
 	response, err := http.DefaultClient.Do(request)
 
 	if response.StatusCode != 200 {
-		return errors.New("Request failed" + response.Status)
+		return errors.New("Request failed: " + response.Status)
 	}
 
 	return err
@@ -376,7 +376,7 @@ func (client *ChatwootClient) AddLabel(conversationId int, label string) error {
 	response, err := http.DefaultClient.Do(request)
 
 	if response.StatusCode != 200 {
-		return errors.New("Request failed" + response.Status)
+		return errors.New("Request failed: " + response.Status)
 	}
 
 	return err
@@ -403,7 +403,7 @@ func (client *ChatwootClient) Assign(conversationId int, assignee_id int) error 
 	response, err := http.DefaultClient.Do(request)
 
 	if response.StatusCode != 200 {
-		return errors.New("Request failed" + response.Status)
+		return errors.New("Request failed: " + response.Status)
 	}
 
 	return err
@@ -430,7 +430,7 @@ func (client *ChatwootClient) AssignTeam(conversationId int, team_id int) error 
 	response, err := http.DefaultClient.Do(request)
 
 	if response.StatusCode != 200 {
-		return errors.New("Request failed" + response.Status)
+		return errors.New("Request failed: " + response.Status)
 	}
 
 	return err
