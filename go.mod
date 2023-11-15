@@ -1,3 +1,3 @@
-module github.com/AndrewChau/chatwoot-golang-client
+module github.com/Kai-Karren/chatwoot-golang-client
 
 go 1.19
