@@ -48,15 +48,20 @@ type CreateContactRequest struct {
 }
 
 type CreateContactResponse struct {
-	Payload Payload `json:"payload"`
+	Payload CreateContactPayload `json:"payload"`
 }
 
-type Payload struct {
+type CreateContactPayload struct {
 	Contact Contact `json:"contact"`
+}
+
+type SearchContactResponse struct {
+	Payload []Contact `json:"payload"`
 }
 
 type Contact struct {
 	ID             int            `json:"id"`
+	Email          string         `json:"email"`
 	ContactInboxes []ContactInbox `json:"contact_inboxes"`
 }
 
@@ -102,6 +107,41 @@ func (client *ChatwootClient) CreateContact(createContactRequest CreateContactRe
 	}
 
 	return createContactResponse, nil
+
+}
+
+func (client *ChatwootClient) SearchContact(query string) (SearchContactResponse, error) {
+
+	url := fmt.Sprintf("%s/api/v1/accounts/%v/contacts/search?q=%s", client.BaseUrl, client.AccountId, query)
+
+	request, err := http.NewRequest(http.MethodGet, url, nil)
+
+	request.Header.Set("Content-Type", "application/json; charset=UTF-8")
+	request.Header.Add("api_access_token", client.AgentToken)
+
+	if err != nil {
+		return SearchContactResponse{}, err
+	}
+
+	response, err := http.DefaultClient.Do(request)
+
+	if err != nil {
+		return SearchContactResponse{}, err
+	}
+
+	body, err := io.ReadAll(response.Body)
+
+	if err != nil {
+		return SearchContactResponse{}, err
+	}
+
+	var searchContactResponse SearchContactResponse
+
+	if err := json.Unmarshal(body, &searchContactResponse); err != nil {
+		return SearchContactResponse{}, err
+	}
+
+	return searchContactResponse, nil
 
 }
 
